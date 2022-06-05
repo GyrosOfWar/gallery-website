@@ -4,7 +4,7 @@ use axum::{
     routing::{get, get_service},
     Extension, Router,
 };
-use sqlx::SqlitePool;
+use sqlx::{sqlite::SqliteConnectOptions, SqlitePool};
 use std::{net::SocketAddr, sync::Arc};
 use tera::Tera;
 use tower_http::{services::ServeDir, trace::TraceLayer};
@@ -41,7 +41,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .init();
 
     let tera = Tera::new("templates/**/*")?;
-    let sql = SqlitePool::connect("sqlite::memory").await?;
+    let sql =
+        SqlitePool::connect_with(SqliteConnectOptions::new().filename("gallery.sqlite3")).await?;
+    sqlx::migrate!("./migrations").run(&sql).await?;
+
     let context = Arc::new(Context { tera, sql });
     let app = Router::new()
         .route("/", get(index))
