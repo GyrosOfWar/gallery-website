@@ -3,5 +3,6 @@ CREATE TABLE gallery_item (
     tags VARCHAR NOT NULL,
     created_on TIMESTAMP NOT NULL,
     -- json object
-    exif_info VARCHAR NOT NULL
+    exif_info VARCHAR NOT NULL,
+    file_name VARCHAR NOT NULL
 );

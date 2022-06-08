@@ -2,3 +2,4 @@
 public/assets/styles.css
 *.sqlite3-shm
 *.sqlite3-wal
+/public/images/
